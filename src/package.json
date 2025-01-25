@@ -4,16 +4,21 @@
    "description": "Awesome project developed with TypeORM.",
    "type": "commonjs",
    "devDependencies": {
-      "ts-node": "10.9.1",
       "@types/node": "^16.11.10",
+      "ts-node": "10.9.1",
       "typescript": "4.5.2"
    },
    "dependencies": {
-      "typeorm": "0.3.20",
-      "reflect-metadata": "^0.1.13"
+      "cors": "^2.8.5",
+      "express": "^4.21.2",
+      "reflect-metadata": "^0.1.13",
+      "sqlite3": "^5.1.7",
+      "typeorm": "0.3.20"
    },
    "scripts": {
-      "start": "ts-node src/index.ts",
+      "personal": "ts-node src/index.ts personal",
+      "dev": "ts-node src/index.ts dev",
+      "prod": "ts-node src/index.ts prod",
       "typeorm": "typeorm-ts-node-commonjs"
    }
 }

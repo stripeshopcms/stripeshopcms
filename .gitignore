@@ -1,0 +1,3 @@
+.env.personal
+config/node_modules/
+src/stripeshopcms.db
