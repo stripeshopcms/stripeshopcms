@@ -2,7 +2,7 @@ import { AppDataSource } from "./data-source"
 import * as express from "express"
 import * as cors from "cors"
 
-import products from "./controllers/ProductContoller"
+import products from "./controllers/ProductController"
 
 AppDataSource.initialize().then(async () => {
 
