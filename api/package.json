@@ -9,8 +9,10 @@
       "typescript": "4.5.2"
    },
    "dependencies": {
+      "cookie-parser": "^1.4.7",
       "cors": "^2.8.5",
       "express": "^4.21.2",
+      "jsonwebtoken": "^9.0.2",
       "reflect-metadata": "^0.1.13",
       "sqlite3": "^5.1.7",
       "stripe": "^17.5.0",
