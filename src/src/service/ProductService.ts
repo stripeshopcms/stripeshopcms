@@ -7,16 +7,30 @@ export async function createProduct(req: Request, res: Response) {
     const product = await stripe.products.create({
         name: "Second test product",
         description: "This is a second test product.",
-        default_price_data: {
-            unit_amount: 1000,
-            currency: 'CAD'
-        }
+    })
+    const price = await stripe.prices.create({
+        product: product.id,
+        currency: 'cad',
+        unit_amount: 1000,
+    })
+    const product2 = await stripe.products.create({
+        name: "test product",
+        description: "This is a test product.",
+    })
+    const price2 = await stripe.prices.create({
+        product: product2.id,
+        currency: 'cad',
+        unit_amount: 2000,
     })
     const paymentLink = await stripe.paymentLinks.create({
         line_items: [
             {
-                price: product.default_price,
+                price: price.id,
                 quantity: 1
+            },
+            {
+                price: price2.id,
+                quantity: 2
             }
         ]
     })
