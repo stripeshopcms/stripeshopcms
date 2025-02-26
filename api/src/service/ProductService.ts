@@ -5,34 +5,28 @@ const stripe = require("stripe")(STRIPE_SECRET_KEY)
 
 export async function createProduct(req: Request, res: Response) {
 	const product = await stripe.products.create({
-		name: "Second test product",
-		description: "This is a second test product.",
+		name: "Nike Shoes",
+		description: "Comfortable Nike Shoes",
+		default_price_data: {
+			unit_amount: 10000,
+			currency: 'usd'
+		},
+		expand: ['default_price']
 	})
-	const price = await stripe.prices.create({
-		product: product.id,
-		currency: 'cad',
-		unit_amount: 1000,
-	})
-	const product2 = await stripe.products.create({
-		name: "test product",
-		description: "This is a test product.",
-	})
-	const price2 = await stripe.prices.create({
-		product: product2.id,
-		currency: 'cad',
-		unit_amount: 2000,
-	})
+	
 	const paymentLink = await stripe.paymentLinks.create({
 		line_items: [
 			{
-				price: price.id,
+				price: product.default_price.id,
 				quantity: 1
-			},
-			{
-				price: price2.id,
-				quantity: 2
 			}
-		]
+		],
+		after_completion: {
+			type: "redirect",
+			redirect: {
+				url: "http://localhost:3000"
+			}
+		}
 	})
 	return res.json(paymentLink)
 }

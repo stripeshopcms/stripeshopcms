@@ -6,7 +6,7 @@ export const AppDataSource = new DataSource({
 	database: "stripeshopcms.db",
 	synchronize: true,
 	logging: false,
-	entities: [User],
+	entities: [],
 	migrations: [],
 	subscribers: [],
 })
