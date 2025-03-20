@@ -5,6 +5,7 @@ import * as jwt from "jsonwebtoken"
 export async function login(req: Request, res: Response) {
 	const token = jwt.sign({
 		id: 1,
+		roles: ["StripeAdmin"]
 	}, JWT_SECRET_KEY)
 
 	res.cookie("jwt", token, {

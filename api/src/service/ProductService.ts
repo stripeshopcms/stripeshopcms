@@ -1,32 +1,26 @@
 import { Request, Response } from "express"
-import { STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY } from "../../../config"
+import { STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY, JWT_SECRET_KEY } from "../../../config"
+import {Product} from "../models/Product"
+import {isStripeAdmin} from "../validators/AuthValidator"
+import * as jwt from "jsonwebtoken"
 
 const stripe = require("stripe")(STRIPE_SECRET_KEY)
 
 export async function createProduct(req: Request, res: Response) {
-	const product = await stripe.products.create({
-		name: "Nike Shoes",
-		description: "Comfortable Nike Shoes",
+	if (!isStripeAdmin(req.cookies["jwt"])) {
+		return res.status(401).send("unauthorized")
+	}
+
+	const product: Product = req.body;
+	const createdProduct = await stripe.products.create({
+		name: product.name,
+		description: product.description,
 		default_price_data: {
-			unit_amount: 10000,
+			unit_amount: product.price,
 			currency: 'usd'
 		},
 		expand: ['default_price']
 	})
 	
-	const paymentLink = await stripe.paymentLinks.create({
-		line_items: [
-			{
-				price: product.default_price.id,
-				quantity: 1
-			}
-		],
-		after_completion: {
-			type: "redirect",
-			redirect: {
-				url: "http://localhost:3000"
-			}
-		}
-	})
-	return res.json(paymentLink)
+	return res.json(createdProduct);
 }

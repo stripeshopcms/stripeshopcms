@@ -3,6 +3,6 @@ import { createProduct } from "../service/ProductService";
 
 const products = Router()
 
-products.get("/", createProduct)
+products.post("/", createProduct)
 
 export default products;
