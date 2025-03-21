@@ -1,15 +1,12 @@
 import {JWT_SECRET_KEY} from "../../../config"
 import * as jwt from "jsonwebtoken"
 
-export function isStripeAdmin(cookie: string): boolean {
+export function isAuthenticated(cookie: string): boolean {
 	try {
 		const auth = jwt.verify(cookie, JWT_SECRET_KEY)
-		if (auth.roles.includes("StripeAdmin")) {
-			return true;
-		}
-		return false;
+		return !!auth;
 	}
-	catch {
+	catch(error) {
 		return false;
 	}
 }

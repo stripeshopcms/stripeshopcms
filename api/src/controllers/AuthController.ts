@@ -1,6 +1,6 @@
 import { JWT_SECRET_KEY } from "../../../config"
 import { Users } from "../entities/Users"
-import { IUser } from "../models/IUser"
+import { IUser } from "../interfaces/IUser"
 import {AppDataSource} from "../DataSource"
 import * as jwt from "jsonwebtoken"
 
@@ -26,6 +26,10 @@ export async function login(req, res) {
 		password: user.password
 	})
 
+	if (foundUser === null) {
+		return res.sendStatus(400);
+	}
+
 	const token = jwt.sign({
 		id: foundUser.id
 	}, JWT_SECRET_KEY)
@@ -44,24 +48,4 @@ export async function logout(req, res) {
 	})
 	
 	return res.sendStatus(200)
-}
-
-export async function checkAuthorization(req, res) {
-	try {
-		const cookie = req.cookies["jwt"]
-		const auth = jwt.verify(cookie, JWT_SECRET_KEY)
-	
-		if (auth) {
-			return res.status(200).json(auth)
-		}
-	
-		return res.status(400).json({
-			error: "unverified"
-		})
-	}
-	catch {
-		return res.status(400).json({ 
-			error: "unverified" 
-		})
-	}
 }
