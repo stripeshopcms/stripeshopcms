@@ -1,27 +1,33 @@
 import { JWT_SECRET_KEY } from "../../../config"
-import * as jwt from "jsonwebtoken"
 import { Users } from "../entities/Users"
-import { UserModel } from "../models/UserModel"
+import { IUser } from "../models/IUser"
 import {AppDataSource} from "../DataSource"
+import * as jwt from "jsonwebtoken"
 
 const userRepository = AppDataSource.getRepository(Users);
 
 export async function create(req, res) {
-	const userModel: UserModel = req.body;
+	const user: IUser = req.body;
 
-	const user: Users = userRepository.create({
-		email: userModel.email,
-		password: userModel.password
+	const newUser: Users = userRepository.create({
+		email: user.email,
+		password: user.password
 	})
 
-	await AppDataSource.manager.save(user);
+	await AppDataSource.manager.save(newUser);
 	return res.json(user);
 }
 
 export async function login(req, res) {
+	const user: IUser = req.body;
+
+	const foundUser = await userRepository.findOneBy({
+		email: user.email,
+		password: user.password
+	})
+
 	const token = jwt.sign({
-		id: 1,
-		roles: ["StripeAdmin"]
+		id: foundUser.id
 	}, JWT_SECRET_KEY)
 
 	res.cookie("jwt", token, {
@@ -29,7 +35,7 @@ export async function login(req, res) {
 		maxAge: 24 * 60 * 60 * 1000
 	})
 	
-	return res.json(token)
+	return res.sendStatus(200)
 }
 
 export async function logout(req, res) {
@@ -37,7 +43,7 @@ export async function logout(req, res) {
 		maxAge: 0
 	})
 	
-	return res.send("ok")
+	return res.sendStatus(200)
 }
 
 export async function checkAuthorization(req, res) {
