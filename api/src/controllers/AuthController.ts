@@ -1,6 +1,14 @@
 import { Request, Response } from "express"
 import { JWT_SECRET_KEY } from "../../../config"
 import * as jwt from "jsonwebtoken"
+import {User} from "../entities/UserEntity"
+import {AppDataSource} from "../index"
+
+export async function create(req: Request, res: Response) {
+  const user: User = req.body;
+  await AppDataSource.manager.save(user);
+  return res.sendStatus(200)
+}
 
 export async function login(req: Request, res: Response) {
   const token = jwt.sign({
