@@ -7,11 +7,11 @@ import {AppDataSource} from "../DataSource"
 const userRepository = AppDataSource.getRepository(Users);
 
 export async function create(req, res) {
-	const {email, password} = req.body;
+	const userModel: UserModel = req.body;
 
 	const user: Users = userRepository.create({
-		email: email,
-		password: password
+		email: userModel.email,
+		password: userModel.password
 	})
 
 	await AppDataSource.manager.save(user);
