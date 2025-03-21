@@ -1,13 +1,13 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
-import {UserEntity} from "./entities/UserEntity"
+import {User} from "./entities/User"
 
 export const AppDataSource = new DataSource({
 	type: "sqlite",
 	database: "stripeshopcms.db",
 	synchronize: true,
 	logging: false,
-	entities: [UserEntity],
+	entities: [User],
 	migrations: [],
 	subscribers: [],
 })

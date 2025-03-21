@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY, JWT_SECRET_KEY } from "../../../config"
-import {Product} from "../models/Product"
+import {ProductModel} from "../models/ProductModel"
 import {isStripeAdmin} from "../validators/AuthValidator"
 import * as jwt from "jsonwebtoken"
 
@@ -11,7 +11,7 @@ export async function createProduct(req, res) {
 		return res.status(401).send("unauthorized")
 	}
 	
-	const product: Product = req.body;
+	const product: ProductModel = req.body;
 	const createdProduct = await stripe.products.create({
 		name: product.name,
 		description: product.description,
