@@ -1,15 +1,15 @@
 import { JWT_SECRET_KEY } from "../../../config"
 import * as jwt from "jsonwebtoken"
-import { User } from "../entities/User"
+import { Users } from "../entities/Users"
 import { UserModel } from "../models/UserModel"
 import {AppDataSource} from "../DataSource"
 
-const userRepository = AppDataSource.getRepository(User);
+const userRepository = AppDataSource.getRepository(Users);
 
 export async function create(req, res) {
 	const {email, password} = req.body;
 
-	const user: User = userRepository.create({
+	const user: Users = userRepository.create({
 		email: email,
 		password: password
 	})
