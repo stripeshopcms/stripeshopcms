@@ -6,7 +6,7 @@ import * as jwt from "jsonwebtoken"
 
 const stripe = require("stripe")(STRIPE_SECRET_KEY)
 
-export async function createProduct(req: Request, res: Response) {
+export async function createProduct(req, res) {
 	if (!isStripeAdmin(req.cookies["jwt"])) {
 		return res.status(401).send("unauthorized")
 	}

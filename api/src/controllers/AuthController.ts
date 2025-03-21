@@ -1,16 +1,19 @@
-import { Request, Response } from "express"
 import { JWT_SECRET_KEY } from "../../../config"
 import * as jwt from "jsonwebtoken"
-import {User} from "../entities/UserEntity"
-import {AppDataSource} from "../index"
+import {UserEntity} from "../entities/UserEntity"
+import { User } from "../models/User"
+import {AppDataSource} from "../DataSource"
 
-export async function create(req: Request, res: Response) {
+export async function create(req, res) {
 	const user: User = req.body;
-	await AppDataSource.manager.save(user);
-	return res.sendStatus(200)
+	const ue: UserEntity = new UserEntity;
+	ue.email = user.email;
+	ue.password = user.password;
+	await AppDataSource.manager.save(ue);
+	return res.json(ue);
 }
 
-export async function login(req: Request, res: Response) {
+export async function login(req, res) {
 	const token = jwt.sign({
 		id: 1,
 		roles: ["StripeAdmin"]
@@ -24,7 +27,7 @@ export async function login(req: Request, res: Response) {
 	return res.json(token)
 }
 
-export async function logout(req: Request, res: Response) {
+export async function logout(req, res) {
 	res.cookie("jwt", "", {
 		maxAge: 0
 	})
@@ -32,7 +35,7 @@ export async function logout(req: Request, res: Response) {
 	return res.send("ok")
 }
 
-export async function checkAuthorization(req: Request, res: Response) {
+export async function checkAuthorization(req, res) {
 	try {
 		const cookie = req.cookies["jwt"]
 		const auth = jwt.verify(cookie, JWT_SECRET_KEY)
