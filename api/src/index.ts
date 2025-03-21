@@ -3,8 +3,8 @@ import * as cookieParser from "cookie-parser"
 import * as express from "express"
 import * as cors from "cors"
 
-import products from "./controllers/ProductController"
-import auth from "./controllers/AuthController"
+import products from "./routers/ProductRouter"
+import auth from "./routers/AuthRouter"
 
 AppDataSource.initialize().then(async () => {
 
